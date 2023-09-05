@@ -1,0 +1,1 @@
+A Spigot plugin to melt your useless items
