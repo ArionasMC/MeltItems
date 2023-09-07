@@ -1,4 +1,11 @@
 name: MeltItems
 version: 1.5
-main: me.amc.meltitems.MeltItems
+main: me.amc.meltitems.MainCore
 api-version: '1.13'
+
+commands:
+  meltitems:
+    description: MeltItems plugin credits/help
+    aliases: [mi]
+  meltitems reload:
+    description: Reloads MeltItems plugin

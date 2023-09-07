@@ -15,7 +15,7 @@ public class RecipeMaker {
           this.source = source;
           this.result = result;
 
-          NamespacedKey key = MeltItems.instance.getKeyForRecipe(source.toString().toLowerCase());
+          NamespacedKey key = MainCore.instance.getKeyForRecipe(source.toString().toLowerCase());
           this.recipe = new FurnaceRecipe(key, this.result, this.source, 0, 1*20);
      }
 
@@ -24,7 +24,7 @@ public class RecipeMaker {
           this.source = Material.getMaterial(parts[0]);
           this.result = new ItemStack(Material.getMaterial(parts[1]), Integer.parseInt(parts[2]));
 
-          NamespacedKey key = MeltItems.instance.getKeyForRecipe(parts[0].toLowerCase());
+          NamespacedKey key = MainCore.instance.getKeyForRecipe(parts[0].toLowerCase());
           this.recipe = new FurnaceRecipe(key, this.result, this.source, 0, 1*20);
      }
 

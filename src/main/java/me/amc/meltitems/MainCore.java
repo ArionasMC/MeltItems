@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class MeltItems extends JavaPlugin {
+public class MainCore extends JavaPlugin {
 
-     public static MeltItems instance; // Singleton
+     public static MainCore instance; // Singleton
 
      public ConfigHelper configHelper;
 
@@ -25,6 +25,8 @@ public class MeltItems extends JavaPlugin {
 
           furnaceRecipes = new ArrayList<>();
           initFurnaceRecipes();
+
+          getCommand("meltitems").setExecutor(new MeltItemsCommand());
 
           if(isEnabled()) {
                getLogger().info(getDescription().getName()+" "+getDescription().getVersion()+" is enabled!");
@@ -42,7 +44,7 @@ public class MeltItems extends JavaPlugin {
           configHelper = new ConfigHelper(getConfig());
      }
 
-     private void initFurnaceRecipes() {
+     public void initFurnaceRecipes() {
           // Remove recipes on reload to initialize again
           if(!furnaceRecipes.isEmpty()) {
                Iterator<Recipe> it = getServer().recipeIterator();
@@ -50,8 +52,10 @@ public class MeltItems extends JavaPlugin {
                     Recipe r = it.next();
                     if(!(r instanceof FurnaceRecipe)) continue;
                     FurnaceRecipe fr = (FurnaceRecipe) r;
-                    if(furnaceRecipes.contains(fr)) {
-                         getLogger().info("Found one of my own!"+fr.getInput().toString()+" "+fr.getResult().toString());
+                    //if(furnaceRecipes.contains(fr)) {
+                    for(FurnaceRecipe cfr : furnaceRecipes) {
+                         if(!areSameFurnaceRecipe(cfr, fr)) continue;
+                         //getLogger().info("Found one of my own!" + fr.getInput().toString() + " " + fr.getResult().toString());
                          it.remove();
                     }
                }
@@ -68,4 +72,10 @@ public class MeltItems extends JavaPlugin {
      public NamespacedKey getKeyForRecipe(String name) {
           return new NamespacedKey(this, getDescription().getName().toLowerCase()+"_"+name);
      }
+
+     private boolean areSameFurnaceRecipe(FurnaceRecipe fr1, FurnaceRecipe fr2) {
+          return fr1.getInput().getType() == fr2.getInput().getType()
+                  && fr1.getResult().getType() == fr2.getResult().getType();
+     }
+
 }
