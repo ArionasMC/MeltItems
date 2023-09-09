@@ -3,26 +3,27 @@ package me.amc.meltitems;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class RecipeModel {
 
      private String name;
+     private Material placeholder;
      private List<String> list;
      private LinkedHashMap<Integer, ItemStack> results;
 
-     public RecipeModel(String name, List<String> list) {
+     public RecipeModel(String name, List<String> list, Material placeholder) {
           this.name = name;
           this.list = list;
+          this.placeholder = placeholder;
           Collections.sort(this.list, new LineComparator());
 
           results = new LinkedHashMap<>();
           for(String line : this.list) {
                String[] parts = line.split(":")[1].split(",");
-               Material mat = Material.getMaterial(parts[0]);
+               Material mat = placeholder;
+               if(!parts[0].equals("%material%"))
+                    mat = Material.getMaterial(parts[0]);
                int quantity = Integer.parseInt(parts[1]);
                int key = Integer.parseInt(line.split(":")[0]);
                results.put(key, new ItemStack(mat, quantity));
@@ -30,13 +31,16 @@ public class RecipeModel {
      }
 
      public ItemStack getResult(int percentage) {
-          int i = 0;
+          Iterator<Integer> iter = results.keySet().iterator();
+          int previous = iter.next();
           for(int key : results.keySet()) {
-               if (percentage >= key)
+               if(percentage == key)
                     return results.get(key);
-               i = key;
+               if (percentage > key)
+                    return results.get(previous);
+               previous = key;
           }
-          return results.get(i);
+          return results.get(previous);
      }
 
 }
@@ -49,4 +53,3 @@ class LineComparator implements Comparator<String> {
           return per2 - per1;
      }
 }
-

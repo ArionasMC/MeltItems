@@ -10,11 +10,26 @@ public class RecipeMaker {
      private Material source;
      private ItemStack result;
      private FurnaceRecipe recipe;
+     private String model;
 
      public RecipeMaker(String recipeLine) {
           String[] parts = recipeLine.split(",");
           this.source = Material.getMaterial(parts[0]);
-          this.result = new ItemStack(Material.getMaterial(parts[1]), Integer.parseInt(parts[2]));
+          Material resultMaterial = Material.getMaterial(parts[1]);
+
+          if(this.source.getMaxDurability() > 0) { // Implement RecipeModel on items with durability
+               String modelName = parts[2]+"_"+parts[1].toLowerCase();
+               if(MainCore.instance.recipeModels.containsKey(modelName)) {
+                    this.result = MainCore.instance.recipeModels.get(modelName).getResult(100);
+               } else { // if model does not exist then create it and then get the result
+                    RecipeModel rm = new RecipeModel(modelName, MainCore.instance.configHelper.getModel(parts[2]), resultMaterial);
+                    MainCore.instance.recipeModels.put(modelName, rm);
+                    this.result = rm.getResult(100);
+               }
+               this.model = modelName;
+          } else {
+               this.result = new ItemStack(resultMaterial, Integer.parseInt(parts[2]));
+          }
 
           NamespacedKey key = MainCore.instance.getKeyForRecipe(parts[0].toLowerCase());
           this.recipe = new FurnaceRecipe(key, this.result, this.source, 0, 1*20);
@@ -30,6 +45,12 @@ public class RecipeMaker {
 
      public FurnaceRecipe getRecipe() {
           return this.recipe;
+     }
+
+     public RecipeModel getRecipeModel() {
+          if(MainCore.instance.recipeModels.containsKey(model))
+               return MainCore.instance.recipeModels.get(model);
+          return null;
      }
 
 }

@@ -15,10 +15,10 @@ public class MainCore extends JavaPlugin {
      public static MainCore instance; // Singleton
 
      public ConfigHelper configHelper;
+     public List<RecipeMaker> recipeMakers;
      public HashMap<String, RecipeModel> recipeModels;
 
      private List<FurnaceRecipe> furnaceRecipes;
-
 
      @Override
      public void onEnable() {
@@ -27,8 +27,11 @@ public class MainCore extends JavaPlugin {
           reloadConfig();
 
           recipeModels = new HashMap<>();
+          recipeMakers = new ArrayList<>();
           furnaceRecipes = new ArrayList<>();
           initFurnaceRecipes();
+
+          new MeltEvents();
 
           getCommand("meltitems").setExecutor(new MeltItemsCommand());
 
@@ -54,20 +57,23 @@ public class MainCore extends JavaPlugin {
                Iterator<Recipe> it = getServer().recipeIterator();
                while(it.hasNext()) {
                     Recipe r = it.next();
-                    if(!(r instanceof FurnaceRecipe)) continue;
+                    if (!(r instanceof FurnaceRecipe)) continue;
                     FurnaceRecipe fr = (FurnaceRecipe) r;
                     //if(furnaceRecipes.contains(fr)) {
-                    for(FurnaceRecipe cfr : furnaceRecipes) {
-                         if(!areSameFurnaceRecipe(cfr, fr)) continue;
+                    for (FurnaceRecipe cfr : furnaceRecipes) {
+                         if (!areSameFurnaceRecipe(cfr, fr)) continue;
                          //getLogger().info("Found one of my own!" + fr.getInput().toString() + " " + fr.getResult().toString());
                          it.remove();
                     }
                }
                furnaceRecipes.clear();
+               recipeMakers.clear();
+               recipeModels.clear();
           }
           // Add all the custom recipes into the game
           for(String s : configHelper.recipes) {
                RecipeMaker rm = new RecipeMaker(s);
+               recipeMakers.add(rm);
                furnaceRecipes.add(rm.getRecipe());
                getServer().addRecipe(rm.getRecipe());
           }
@@ -77,7 +83,7 @@ public class MainCore extends JavaPlugin {
           return new NamespacedKey(this, getDescription().getName().toLowerCase()+"_"+name);
      }
 
-     private boolean areSameFurnaceRecipe(FurnaceRecipe fr1, FurnaceRecipe fr2) {
+     public boolean areSameFurnaceRecipe(FurnaceRecipe fr1, FurnaceRecipe fr2) {
           return fr1.getInput().getType() == fr2.getInput().getType()
                   && fr1.getResult().getType() == fr2.getResult().getType();
      }
