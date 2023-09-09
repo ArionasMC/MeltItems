@@ -3,31 +3,58 @@
 #######################################################
 # MeltItems v1.5 by Arionas_MC
 # Check out my other plugins here: https://www.spigotmc.org/resources/authors/arionas_mc.202993/
-# MeltItems' source code:
+# MeltItems' source code: https://github.com/ArionasMC/MeltItems
 
+# This is the recipes list. Here you can add your own Furnace Recipes!
+# Syntax: '<source>,<result>,<model>/<quantity>'
+# - <source> = The item you want to melt
+# - <result> = The result item (this item replaces the %material% placeholder below in models list)
+# - <model> = The recipe's model (IT IS REQUIRED THAT THE ITEMS HAS DURABILITY)
+# - <quantity> = The quantity of the result (ONLY USED WHEN THE ITEM HAS NO DURABILITY e.g a bucket)
+# NOTE: You can find all appropriate item names here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 recipes:
-  - 'DIAMOND_SWORD,DIAMOND,2'
-  - 'DIAMOND_AXE,DIAMOND,3'
-  - 'DIAMOND_SHOVEL,DIAMOND,1'
-  - 'DIAMOND_HOE,DIAMOND,2'
-  - 'DIAMOND_PICKAXE,DIAMOND,3'
-  - 'IRON_SWORD,IRON_INGOT,2'
-  - 'IRON_AXE,IRON_INGOT,3'
-  - 'IRON_SHOVEL,IRON_INGOT,1'
-  - 'IRON_HOE,IRON_INGOT,2'
-  - 'IRON_PICKAXE,IRON_INGOT,3'
-  - 'GOLDEN_SWORD,GOLD_INGOT,2'
-  - 'GOLDEN_AXE,GOLD_INGOT,3'
-  - 'GOLDEN_SHOVEL,GOLD_INGOT,1'
-  - 'GOLDEN_HOE,GOLD_INGOT,2'
-  - 'GOLDEN_PICKAXE,GOLD_INGOT,3'
-  - 'STONE_SWORD,STONE,2'
-  - 'STONE_AXE,STONE,3'
-  - 'STONE_SHOVEL,STONE,1'
-  - 'STONE_HOE,STONE,2'
-  - 'STONE_PICKAXE,STONE,3'
-  - 'WOODEN_SWORD,COAL,2'
-  - 'WOODEN_AXE,COAL,3'
-  - 'WOODEN_SHOVEL,COAL,1'
-  - 'WOODEN_HOE,COAL,2'
-  - 'WOODEN_PICKAXE,COAL,3'
+  - 'DIAMOND_SWORD,DIAMOND,sword_standard'
+  - 'DIAMOND_AXE,DIAMOND,axe_standard'
+  - 'DIAMOND_SHOVEL,DIAMOND,shovel_standard'
+  - 'DIAMOND_HOE,DIAMOND,sword_standard'
+  - 'DIAMOND_PICKAXE,DIAMOND,axe_standard'
+  - 'IRON_SWORD,IRON_INGOT,sword_standard'
+  - 'IRON_AXE,IRON_INGOT,axe_standard'
+  - 'IRON_SHOVEL,IRON_INGOT,shovel_standard'
+  - 'IRON_HOE,IRON_INGOT,sword_standard'
+  - 'IRON_PICKAXE,IRON_INGOT,axe_standard'
+  - 'GOLDEN_SWORD,GOLD_INGOT,sword_standard'
+  - 'GOLDEN_AXE,GOLD_INGOT,axe_standard'
+  - 'GOLDEN_SHOVEL,GOLD_INGOT,shovel_standard'
+  - 'GOLDEN_HOE,GOLD_INGOT,sword_standard'
+  - 'GOLDEN_PICKAXE,GOLD_INGOT,axe_standard'
+  - 'STONE_SWORD,STONE,sword_standard'
+  - 'STONE_AXE,STONE,axe_standard'
+  - 'STONE_SHOVEL,STONE,shovel_standard'
+  - 'STONE_HOE,STONE,sword_standard'
+  - 'STONE_PICKAXE,STONE,axe_standard'
+  - 'WOODEN_SWORD,COAL,sword_standard'
+  - 'WOODEN_AXE,COAL,axe_standard'
+  - 'WOODEN_SHOVEL,COAL,shovel_standard'
+  - 'WOODEN_HOE,COAL,sword_standard'
+  - 'WOODEN_PICKAXE,COAL,axe_standard'
+  - 'BUCKET,IRON_INGOT,3'
+
+# This is the models list. A model affects the results of the recipes
+# In each model you can add a line with the following syntax: '<durability>,<material>,<quantity>
+# - <durability> represents the durability percentage at which and below the following line has an effect
+# - <material> can be either a material or the %material% placeholder which will be replaced as mentioned above
+# - <quantity> is the quantity of <material> as the recipe's result
+models:
+  sword_standard:
+    - '100:%material%,2'
+    - '50:%material%,1'
+    - '25:COAL,1'
+  axe_standard:
+    - '100:%material%,3'
+    - '75:%material%,2'
+    - '40:%material%,1'
+    - '20:COAL,1'
+  shovel_standard:
+    - '100:%material%,1'
+    - '50:COAL,1'

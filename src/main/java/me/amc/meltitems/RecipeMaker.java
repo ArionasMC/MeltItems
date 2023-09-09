@@ -11,14 +11,6 @@ public class RecipeMaker {
      private ItemStack result;
      private FurnaceRecipe recipe;
 
-     public RecipeMaker(Material source, ItemStack result) {
-          this.source = source;
-          this.result = result;
-
-          NamespacedKey key = MainCore.instance.getKeyForRecipe(source.toString().toLowerCase());
-          this.recipe = new FurnaceRecipe(key, this.result, this.source, 0, 1*20);
-     }
-
      public RecipeMaker(String recipeLine) {
           String[] parts = recipeLine.split(",");
           this.source = Material.getMaterial(parts[0]);

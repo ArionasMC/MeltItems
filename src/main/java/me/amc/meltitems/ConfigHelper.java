@@ -12,11 +12,11 @@ public class ConfigHelper {
 
      public ConfigHelper(FileConfiguration config) {
           this.config = config;
-          initVariables();
+          recipes = config.getStringList("recipes");
      }
 
-     private void initVariables() {
-          recipes = config.getStringList("recipes");
+     public List<String> getModel(String name) {
+          return config.getStringList("models."+name.toLowerCase());
      }
 
 }

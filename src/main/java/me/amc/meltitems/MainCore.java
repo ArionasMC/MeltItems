@@ -6,6 +6,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,8 +15,10 @@ public class MainCore extends JavaPlugin {
      public static MainCore instance; // Singleton
 
      public ConfigHelper configHelper;
+     public HashMap<String, RecipeModel> recipeModels;
 
      private List<FurnaceRecipe> furnaceRecipes;
+
 
      @Override
      public void onEnable() {
@@ -23,6 +26,7 @@ public class MainCore extends JavaPlugin {
           saveDefaultConfig();
           reloadConfig();
 
+          recipeModels = new HashMap<>();
           furnaceRecipes = new ArrayList<>();
           initFurnaceRecipes();
 
