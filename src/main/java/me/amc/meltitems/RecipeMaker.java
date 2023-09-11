@@ -11,6 +11,7 @@ public class RecipeMaker {
      private ItemStack result;
      private FurnaceRecipe recipe;
      private String model;
+     private NamespacedKey key;
 
      public RecipeMaker(String recipeLine) {
           String[] parts = recipeLine.split(",");
@@ -32,6 +33,7 @@ public class RecipeMaker {
           }
 
           NamespacedKey key = MainCore.instance.getKeyForRecipe(parts[0].toLowerCase());
+          this.key = key;
           this.recipe = new FurnaceRecipe(key, this.result, this.source, 0, 1*20);
      }
 
@@ -51,6 +53,10 @@ public class RecipeMaker {
           if(MainCore.instance.recipeModels.containsKey(model))
                return MainCore.instance.recipeModels.get(model);
           return null;
+     }
+
+     public NamespacedKey getKey() {
+          return this.key;
      }
 
 }
