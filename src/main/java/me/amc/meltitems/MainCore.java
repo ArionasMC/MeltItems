@@ -21,7 +21,6 @@ public class MainCore extends JavaPlugin {
      public List<RecipeMaker> recipeMakers;
      public HashMap<String, RecipeModel> recipeModels;
 
-     private List<FurnaceRecipe> furnaceRecipes;
      private List<NamespacedKey> keys;
 
      private boolean newerVersion;
@@ -36,7 +35,6 @@ public class MainCore extends JavaPlugin {
 
           recipeModels = new HashMap<>();
           recipeMakers = new ArrayList<>();
-          furnaceRecipes = new ArrayList<>();
           keys = new ArrayList<>();
           initFurnaceRecipes();
 
@@ -45,6 +43,7 @@ public class MainCore extends JavaPlugin {
           getCommand("meltitems").setExecutor(new MeltItemsCommand());
 
           if(isEnabled()) {
+               getLogger().info("Loaded "+recipeMakers.size()+" new recipes!");
                getLogger().info(getDescription().getName()+" "+getDescription().getVersion()+" is enabled!");
           }
      }
@@ -62,11 +61,10 @@ public class MainCore extends JavaPlugin {
 
      public void initFurnaceRecipes() {
           // Remove recipes on reload to initialize again
-         printNumberOfRecipes(false);
-          if(!furnaceRecipes.isEmpty()) {
-
+          //printNumberOfRecipes(false);
+          if(!recipeMakers.isEmpty()) {
                if(newerVersion) { // Use Bukkit.removeRecipe using Java Reflection
-                    getLogger().info("Trying newer reload!");
+                    //getLogger().info("Trying newer reload!");
                     try {
                          Method m = Bukkit.class.getDeclaredMethod("removeRecipe", NamespacedKey.class);
                          for (NamespacedKey key : keys) {
@@ -81,33 +79,30 @@ public class MainCore extends JavaPlugin {
                          Recipe r = it.next();
                          if (!(r instanceof FurnaceRecipe)) continue;
                          FurnaceRecipe fr = (FurnaceRecipe) r;
-                         //if(furnaceRecipes.contains(fr)) {
-                         //for (FurnaceRecipe cfr : furnaceRecipes) {
+
                          for (RecipeMaker rm : recipeMakers) {
                               if (!areSameFurnaceRecipe(rm.getRecipe(), fr)) continue;
-                              getLogger().info("Found one! key=" + rm.getKey());
-                              //getLogger().info("Found one of my own!" + fr.getInput().toString() + " " + fr.getResult().toString());
+                              //getLogger().info("Found one! key=" + rm.getKey());
                               it.remove();
                          }
                     }
                }
 
-               furnaceRecipes.clear();
                recipeMakers.clear();
                recipeModels.clear();
                keys.clear();
           }
-          printNumberOfRecipes(false);
+          //printNumberOfRecipes(false);
           // Add all the custom recipes into the game
           for(String s : configHelper.recipes) {
                RecipeMaker rm = new RecipeMaker(s);
                recipeMakers.add(rm);
-               furnaceRecipes.add(rm.getRecipe());
                Bukkit.addRecipe(rm.getRecipe());
           }
-          printNumberOfRecipes(false);
+          //printNumberOfRecipes(false);
      }
 
+     // For debugging purposes
      private void printNumberOfRecipes(boolean show) {
           Iterator<Recipe> it = Bukkit.recipeIterator();
           int i = 0;
@@ -138,7 +133,7 @@ public class MainCore extends JavaPlugin {
      private boolean isNewerVersion() {
           String a = getServer().getClass().getPackage().getName();
           String version = a.substring(a.lastIndexOf('.') + 1);
-          getLogger().info("Version:  " + version);
+          //getLogger().info("Version:  " + version);
           int v = Integer.parseInt(version.split("_")[1]);
           return v >= 16;
      }

@@ -12,6 +12,8 @@ public class RecipeMaker {
      private FurnaceRecipe recipe;
      private String model;
      private NamespacedKey key;
+     private int exp;
+     private int time;
 
      public RecipeMaker(String recipeLine) {
           String[] parts = recipeLine.split(",");
@@ -31,10 +33,13 @@ public class RecipeMaker {
           } else {
                this.result = new ItemStack(resultMaterial, Integer.parseInt(parts[2]));
           }
+          this.exp = Integer.parseInt(parts[3]);
+          this.time = Integer.parseInt(parts[4]);
 
           NamespacedKey key = MainCore.instance.getKeyForRecipe(parts[0].toLowerCase());
           this.key = key;
-          this.recipe = new FurnaceRecipe(key, this.result, this.source, 0, 1*20);
+
+          this.recipe = new FurnaceRecipe(key, this.result, this.source, this.exp, this.time*20);
      }
 
      public Material getSource() {
@@ -57,6 +62,14 @@ public class RecipeMaker {
 
      public NamespacedKey getKey() {
           return this.key;
+     }
+
+     public int getExp() {
+          return this.exp;
+     }
+
+     public int getTime() {
+          return this.time;
      }
 
 }
